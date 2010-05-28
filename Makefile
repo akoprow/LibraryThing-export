@@ -25,7 +25,7 @@ COOKIES := cookies.txt
 
 ######################################################################################################
 
-# .PHONY: login
+.PHONY: login
 
 login:
 	wget --save-cookies $(COOKIES) "$(LOGINURL)" --directory-prefix=tmp
@@ -33,7 +33,7 @@ login:
 %.xhtml: %.html
 	html2xhtml -t strict $< -o $@ 
 
-covers.html: 
+covers.html: login
 	wget --load-cookies $(COOKIES) "$(COVERSURL)" -O $@
 
 covers.xml: covers.xhtml

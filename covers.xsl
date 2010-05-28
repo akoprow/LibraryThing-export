@@ -15,21 +15,11 @@
     
 	<xsl:template match="//xhtml:div[@class='graphicalShelf']//xhtml:a">
 		<cover>
-		
+			<xsl:attribute name="id">
+				<xsl:value-of select="substring-after(@href, '/work/book/')" />
+			</xsl:attribute>
+			<xsl:value-of select="xhtml:img/@src" /> 
 		</cover>	
 	</xsl:template>
- 
-<!-- 
-	<xsl:template match="/">
-		Howdie:
-		<xsl:for-each select="//img">
-			<xsl:value-of select="name()" />
-			<xsl:text>
-			</xsl:text>
-		</xsl:for-each>
-	</xsl:template>
--->
- 	
-<!-- <xsl:template match="div/@value[.='graphicalShelf']//a"> -->
-	
+
 </xsl:stylesheet>
