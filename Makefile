@@ -19,8 +19,10 @@ RUN_XSLT := $(SAXON)
 
 ######################################################################################################
 
-LOGINURL := http://librarything.com/signup.php?formusername=$(USERNAME)&formpassword=$(PASSWD)
-COVERSURL := http://www.librarything.com/allyourcovers
+LOGIN_URL := http://librarything.com/signup.php?formusername=$(USERNAME)&formpassword=$(PASSWD)
+COVERS_URL := http://www.librarything.com/allyourcovers
+BOOKS_URL := http://www.librarything.com/export-tab
+
 COOKIES := cookies.txt
 
 ######################################################################################################
@@ -28,13 +30,25 @@ COOKIES := cookies.txt
 .PHONY: login
 
 login:
-	wget --save-cookies $(COOKIES) "$(LOGINURL)" --directory-prefix=tmp
+	wget --save-cookies $(COOKIES) "$(LOGIN_URL)" --directory-prefix=tmp
 
 %.xhtml: %.html
 	html2xhtml -t strict $< -o $@ 
 
 covers.html: login
-	wget --load-cookies $(COOKIES) "$(COVERSURL)" -O $@
+	wget --load-cookies $(COOKIES) "$(COVERS_URL)" -O $@
 
 covers.xml: covers.xhtml
 	$(RUN_XSLT) -o $@ $< covers.xsl
+
+books-UTF16.xls: login
+	wget --load-cookies $(COOKIES) "$(BOOKS_URL)" -O $@
+
+books.xls: books-UTF16.xls
+	iconv -f UTF-16 -o $@ $<
+
+books.xml: books.csv
+	ffe -o $@ -c csv2xml.fferc -s csv2xml $<
+
+clean:
+	rm books.xml books.xls books-UTF16.xls covers.xml covers.html cookies.txt
