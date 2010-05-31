@@ -1,0 +1,44 @@
+structure xls2xml {
+    type separated |
+    header all
+    output xml
+    record data {
+        field id
+        field title
+        field FILLER
+        field author
+        field FILLER
+        field FILLER
+        field FILLER
+        field FILLER
+        field FILLER
+        field FILLER
+        field FILLER
+        field FILLER
+        field FILLER
+        field FILLER
+        field FILLER
+        field FILLER
+        field FILLER
+        field FILLER
+        field FILLER
+        field finished
+        field rating
+        field FILLER
+        field FILLER
+        field FILLER
+        field FILLER
+        field FILLER
+        field FILLER
+        field FILLER
+        field FILLER
+    }
+}
+
+output xml {
+    file_header "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+    data "<%n>%t</%n>\n"
+    record_header "<%r>\n"
+    record_trailer "</%r>\n"
+    indent " "
+}

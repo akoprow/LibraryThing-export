@@ -41,14 +41,14 @@ covers.html: login
 covers.xml: covers.xhtml
 	$(RUN_XSLT) -o $@ $< covers.xsl
 
-books-UTF16.xls: login
-	wget --load-cookies $(COOKIES) "$(BOOKS_URL)" -O $@
+books.xls: login
+	wget --load-cookies $(COOKIES) "$(BOOKS_URL)" -O $@.tmp
+	iconv -f UTF-16 -o $@ $@.tmp
+	sed -i 's/\t/|/g' $@
+	rm $@.tmp
 
-books.xls: books-UTF16.xls
-	iconv -f UTF-16 -o $@ $<
-
-books.xml: books.csv
-	ffe -o $@ -c csv2xml.fferc -s csv2xml $<
+books.xml: books.xls
+	ffe -o $@ -c xls2xml.fferc -s xls2xml -l $<
 
 clean:
-	rm books.xml books.xls books-UTF16.xls covers.xml covers.html cookies.txt
+	rm -f books.xml books.xls books-UTF16.xls covers.xml covers.html cookies.txt
