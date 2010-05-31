@@ -1,21 +1,8 @@
 # - Adam Koprowski 28/05/2010
 
+SAXON_DIR := ../tools/saxon
 include LT_passwd
-
-######################################################################################################
-
-SHOW := @echo
-HIDE := @
-
-SAXON_JAR ?= ../tools/saxon/saxon9.jar
-RESOLVER_JAR ?= ../tools/saxon/resolver.jar
-SAXON := java -cp $(SAXON_JAR):$(RESOLVER_JAR) -Dxml.catalog.files=../tools/saxon/dtds/catalog.xml \
-	-Dxml.catalog.verbosity=1 net.sf.saxon.Transform \
-    -r org.apache.xml.resolver.tools.CatalogResolver \
-    -x org.apache.xml.resolver.tools.ResolvingXMLReader \
-    -y org.apache.xml.resolver.tools.ResolvingXMLReader
-
-RUN_XSLT := $(SAXON)
+include ../Makefile.common
 
 ######################################################################################################
 
@@ -28,6 +15,8 @@ COOKIES := cookies.txt
 ######################################################################################################
 
 .PHONY: login
+
+update-books: ../data/books.xml
 
 login:
 	wget --save-cookies $(COOKIES) "$(LOGIN_URL)" --directory-prefix=tmp
@@ -48,7 +37,7 @@ books.xls: login
 	sed -i 's/\& /\&amp; /g' $@
 	rm $@.tmp
 
-books.xml: books.xls covers.csv xls2xml.fferc
+../data/books.xml: books.xls covers.csv xls2xml.fferc
 	ffe -o $@ -c xls2xml.fferc -s xls2xml -l $<
 
 clean:
