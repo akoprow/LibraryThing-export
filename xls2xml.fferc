@@ -2,8 +2,8 @@ structure xls2xml {
     type separated |
     header all
     output xml
-    record data {
-        field id
+    record book {
+        field cover-url * cover
         field title
         field FILLER
         field author
@@ -35,9 +35,17 @@ structure xls2xml {
     }
 }
 
+lookup cover {
+	search exact
+    file covers.csv
+    default-value MISSING COVER! 
+}
+
 output xml {
-    file_header "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+    file_header "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<books>\n"
+    file_trailer "\n</books>"
     data "<%n>%t</%n>\n"
+    lookup "<%n>%l</%n>\n"
     record_header "<%r>\n"
     record_trailer "</%r>\n"
     indent " "
