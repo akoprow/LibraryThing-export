@@ -39,6 +39,7 @@ books.xls: login
 
 ../data/books.xml: books.xls covers.csv xls2xml.fferc
 	ffe -o $@ -c xls2xml.fferc -s xls2xml -l $<
+	$(RUN_XSLT) -o $@ $@ normalizeDate.xsl
 
 clean:
 	rm -f covers.html covers.csv books.xls books.xml covers.xhtml cookies.txt
