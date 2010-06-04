@@ -3,7 +3,7 @@ structure xls2xml {
     header all
     output xml
     record book {
-        field cover-url * cover
+        field id * cover print-cover
         field title
         field FILLER
         field author
@@ -48,5 +48,10 @@ output xml {
     lookup "<%n>%l</%n>\n"
     record_header "<%r>\n"
     record_trailer "</%r>\n"
-    indent " "
+    indent "  "
+}
+
+output print-cover {
+    lookup "<%n>%t</%n>\n    <cover-url>%l</cover-url>\n"
+    indent "  "
 }
