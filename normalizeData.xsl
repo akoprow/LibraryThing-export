@@ -9,6 +9,15 @@
 		</xsl:copy>
 	</xsl:template>
 	
+	<xsl:template match="rating">
+		<rating>
+			<xsl:value-of select="." />
+			<xsl:if test="string-length(.) = 1">
+				<xsl:text>.0</xsl:text>
+			</xsl:if>
+		</rating>
+	</xsl:template>
+
 	<xsl:template match="finished">
 		<finished>
 			<xsl:value-of select="substring(.,string-length(.)-3,4)" />
