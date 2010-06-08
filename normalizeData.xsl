@@ -9,6 +9,12 @@
 		</xsl:copy>
 	</xsl:template>
 	
+	<xsl:template match="author">
+		<author>
+			<xsl:value-of select="lower-case(.)" />
+		</author>
+	</xsl:template>
+
 	<xsl:template match="rating">
 		<rating>
 			<xsl:value-of select="." />
