@@ -1,6 +1,5 @@
 # - Adam Koprowski 28/05/2010
 
-SAXON_DIR := ../tools/saxon
 include LT_passwd
 include Makefile.XSLT
 
@@ -14,12 +13,12 @@ COOKIES := cookies.txt
 
 ######################################################################################################
 
-.PHONY: login
+.PHONY: login clean
 
 all: books.xml
 
 login:
-	wget --save-cookies $(COOKIES) "$(LOGIN_URL)" --directory-prefix=tmp
+	wget --save-cookies $(COOKIES) "$(LOGIN_URL)" --directory-prefix=/tmp
 
 %.xhtml: %.html
 	html2xhtml -t strict $< -o $@ 
