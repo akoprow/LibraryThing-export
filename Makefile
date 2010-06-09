@@ -2,7 +2,7 @@
 
 SAXON_DIR := ../tools/saxon
 include LT_passwd
-include ../Makefile.common
+include Makefile.XSLT
 
 ######################################################################################################
 
@@ -16,7 +16,7 @@ COOKIES := cookies.txt
 
 .PHONY: login
 
-update-books: ../data/books.xml
+all: books.xml
 
 login:
 	wget --save-cookies $(COOKIES) "$(LOGIN_URL)" --directory-prefix=tmp
@@ -37,7 +37,7 @@ books.xls: login
 	sed -i 's/\& /\&amp; /g' $@
 	rm $@.tmp
 
-../data/books.xml: books.xls covers.csv xls2xml.fferc
+books.xml: books.xls covers.csv xls2xml.fferc
 	ffe -o $@ -c xls2xml.fferc -s xls2xml -l $<
 	$(RUN_XSLT) -o $@ $@ normalizeData.xsl
 
