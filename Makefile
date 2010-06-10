@@ -1,7 +1,7 @@
 # - Adam Koprowski 28/05/2010
 
-include LT_passwd
-include Makefile.XSLT
+include .LT_passwd
+include Makefile-XSLT
 
 ######################################################################################################
 
@@ -41,4 +41,4 @@ books.xml: books.xls covers.csv xls2xml.fferc
 	$(RUN_XSLT) -o $@ $@ normalizeData.xsl
 
 clean:
-	rm -f covers.html covers.csv books.xls books.xml covers.xhtml cookies.txt
+	rm -f covers.html covers.csv books.xls books.xml covers.xhtml $(COOKIES)
