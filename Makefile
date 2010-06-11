@@ -18,27 +18,34 @@ COOKIES := cookies.txt
 all: books.xml
 
 login:
-	wget --save-cookies $(COOKIES) "$(LOGIN_URL)" --directory-prefix=/tmp
+	$(SHOW) Logging in to LibraryThing...
+	$(HIDE) wget --save-cookies $(COOKIES) "$(LOGIN_URL)" --directory-prefix=/tmp -o /dev/null
 
 %.xhtml: %.html
-	html2xhtml -t strict $< -o $@ 
+	$(SHOW) Generating: [$@]
+	$(HIDE) html2xhtml -t strict $< -o $@
 
 covers.html: login
-	wget --load-cookies $(COOKIES) "$(COVERS_URL)" -O $@
+	$(SHOW) Generating: [$@]
+	$(HIDE) wget --load-cookies $(COOKIES) "$(COVERS_URL)" -O $@ -o /dev/null
 
 covers.csv: covers.xhtml covers.xsl
-	$(RUN_XSLT) -o $@ $< covers.xsl
+	$(SHOW) Generating: [$@]
+	$(HIDE) $(RUN_XSLT) -o $@ $< covers.xsl
 
 books.xls: login
-	wget --load-cookies $(COOKIES) "$(BOOKS_URL)" -O $@.tmp
-	iconv -f UTF-16 -o $@ $@.tmp
-	sed -i 's/\t/|/g' $@
-	sed -i 's/\& /\&amp; /g' $@
-	rm $@.tmp
+	$(SHOW) Generating: [$@]
+	$(HIDE) wget --load-cookies $(COOKIES) "$(BOOKS_URL)" -O $@.tmp -o /dev/null
+	$(HIDE) iconv -f UTF-16 -o $@ $@.tmp
+	$(HIDE) sed -i 's/\t/|/g' $@
+	$(HIDE) sed -i 's/\& /\&amp; /g' $@
+	$(HIDE) rm $@.tmp
 
 books.xml: books.xls covers.csv xls2xml.fferc
-	ffe -o $@ -c xls2xml.fferc -s xls2xml -l $<
-	$(RUN_XSLT) -o $@ $@ normalizeData.xsl
+	$(SHOW) Generating: [$@]
+	$(HIDE) ffe -o $@ -c xls2xml.fferc -s xls2xml -l $< 2> /dev/null
+	$(HIDE) $(RUN_XSLT) -o $@ $@ normalizeData.xsl
 
 clean:
-	rm -f covers.html covers.csv books.xls books.xml covers.xhtml $(COOKIES)
+	$(SHOW) Cleaning...
+	$(HIDE) rm -f covers.html covers.csv books.xls books.xml covers.xhtml $(COOKIES)
