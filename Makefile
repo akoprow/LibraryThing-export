@@ -8,6 +8,7 @@ include Makefile-XSLT
 LOGIN_URL := http://librarything.com/signup.php?formusername=$(USERNAME)&formpassword=$(PASSWD)
 COVERS_URL := http://www.librarything.com/allyourcovers
 BOOKS_URL := http://www.librarything.com/export-tab
+AUTHOR_IMGS_URL := http://www.librarything.com/authorgallery.php?view=adam.koprowski
 
 COOKIES := cookies.txt
 
@@ -15,7 +16,7 @@ COOKIES := cookies.txt
 
 .PHONY: login clean
 
-all: books.xml
+all: books.xml authors.xml
 
 login:
 	$(SHOW) Logging in to LibraryThing...
@@ -28,6 +29,10 @@ login:
 covers.html: login
 	$(SHOW) Generating: [$@]
 	$(HIDE) wget --load-cookies $(COOKIES) "$(COVERS_URL)" -O $@ -o /dev/null
+
+author-imgs.html: 
+	$(SHOW) Generating: [$@]
+	$(HIDE) wget --load-cookies $(COOKIES) "$(AUTHOR_IMGS_URL)" -O $@ -o /dev/null
 
 covers.csv: covers.xhtml covers.xsl
 	$(SHOW) Generating: [$@]
@@ -46,6 +51,10 @@ books.xml: books.xls covers.csv xls2xml.fferc
 	$(HIDE) ffe -o $@ -c xls2xml.fferc -s xls2xml -l $< 2> /dev/null
 	$(HIDE) $(RUN_XSLT) -o $@ $@ normalizeData.xsl
 
+authors.xml: author-imgs.xhtml
+	$(SHOW) Generating: [$@]
+	$(HIDE) $(RUN_XSLT) -o $@ $< authors.xsl
+
 clean:
 	$(SHOW) Cleaning...
-	$(HIDE) rm -f covers.html covers.csv books.xls books.xml covers.xhtml $(COOKIES)
+	$(HIDE) rm -f authors.xml author-imgs.html author-imgs.xhtml covers.html covers.csv books.xls books.xml covers.xhtml $(COOKIES)
