@@ -5,3 +5,7 @@ covers.xhtml
 covers.csv
 books.xml
 books.xls
+authors.xml
+authors.xsl
+author-imgs.html
+author-imgs.xhtml
