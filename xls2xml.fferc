@@ -24,8 +24,8 @@ structure xls2xml {
         field FILLER
         field finished
         field rating
+        field collections
         field tags
-        field FILLER
         field FILLER
         field FILLER
         field comment
